@@ -51,7 +51,15 @@ namespace RBX_Alt_Manager
         public static RestClient GameJoinClient;
         public static RestClient Web13Client;
         public static string CurrentPlaceId { get => Instance.PlaceID.Text; }
-        public static string CurrentJobId { get => Instance.JobID.Text; }
+        public static string CurrentJobId
+        {
+            get
+            {
+                if (Instance.PrivateServerSelector.SelectedItem is ComboBoxItem item)
+                    return item.Value;
+                return "";
+            }
+        }
         private ArgumentsForm afform;
         private ServerList ServerListForm;
         private AccountUtils UtilsForm;
@@ -819,6 +827,8 @@ namespace RBX_Alt_Manager
 
             var PresenceTimer = new System.Timers.Timer(60000 * 2) { Enabled = true };
             PresenceTimer.Elapsed += (s, e) => AccountsView.InvokeIfRequired(async () => await UpdatePresence());
+
+            RefreshPrivateServerSelector();
         }
 
         public void ApplyTheme()
@@ -1440,7 +1450,7 @@ namespace RBX_Alt_Manager
             DescriptionBox.Text = SelectedAccount.Description;
 
             if (!string.IsNullOrEmpty(SelectedAccount.GetField("SavedPlaceId"))) PlaceID.Text = SelectedAccount.GetField("SavedPlaceId");
-            if (!string.IsNullOrEmpty(SelectedAccount.GetField("SavedJobId"))) JobID.Text = SelectedAccount.GetField("SavedJobId");
+            // if (!string.IsNullOrEmpty(SelectedAccount.GetField("SavedJobId"))) JobID.Text = SelectedAccount.GetField("SavedJobId");
         }
 
         private void SetAlias_Click(object sender, EventArgs e)
@@ -1463,8 +1473,8 @@ namespace RBX_Alt_Manager
         {
             Match IDMatch = Regex.Match(PlaceID.Text, @"\/games\/(\d+)[\/|\?]?"); // idiotproofing
 
-            if (PlaceID.Text.Contains("privateServerLinkCode") && IDMatch.Success)
-                JobID.Text = PlaceID.Text;
+            // if (PlaceID.Text.Contains("privateServerLinkCode") && IDMatch.Success)
+            //     JobID.Text = PlaceID.Text;
 
             Game G = RecentGames.FirstOrDefault(RG => RG.Details.filteredName == PlaceID.Text);
 
@@ -1473,7 +1483,7 @@ namespace RBX_Alt_Manager
 
             PlaceID.Text = IDMatch.Success ? IDMatch.Groups[1].Value : Regex.Replace(PlaceID.Text, "[^0-9]", "");
 
-            bool VIPServer = JobID.TextLength > 4 && JobID.Text.Substring(0, 4) == "VIP:";
+            bool VIPServer = CurrentJobId.Length > 4 && CurrentJobId.Substring(0, 4) == "VIP:";
 
             if (!long.TryParse(PlaceID.Text, out long PlaceId)) return;
 
@@ -1490,11 +1500,11 @@ namespace RBX_Alt_Manager
                 {
                     LauncherToken = new CancellationTokenSource();
 
-                    await LaunchAccounts(SelectedAccounts, PlaceId, VIPServer ? JobID.Text.Substring(4) : JobID.Text, false, VIPServer);
+                    await LaunchAccounts(SelectedAccounts, PlaceId, VIPServer ? CurrentJobId.Substring(4) : CurrentJobId, false, VIPServer);
                 }
                 else if (SelectedAccount != null)
                 {
-                    string res = await SelectedAccount.JoinServer(PlaceId, VIPServer ? JobID.Text.Substring(4) : JobID.Text, false, VIPServer);
+                    string res = await SelectedAccount.JoinServer(PlaceId, VIPServer ? CurrentJobId.Substring(4) : CurrentJobId, false, VIPServer);
 
                     if (!res.Contains("Success"))
                         MessageBox.Show(res);
@@ -1651,11 +1661,11 @@ namespace RBX_Alt_Manager
 
             if (SelectedAccount.GetAuthTicket(out string Ticket))
             {
-                bool HasJobId = string.IsNullOrEmpty(JobID.Text);
+                bool HasJobId = string.IsNullOrEmpty(CurrentJobId);
                 double LaunchTime = Math.Floor((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds * 1000);
 
                 Random r = new Random();
-                Clipboard.SetText(string.Format("<roblox-player://1/1+launchmode:play+gameinfo:{0}+launchtime:{4}+browsertrackerid:{5}+placelauncherurl:https://assetgame.roblox.com/game/PlaceLauncher.ashx?request=RequestGame{3}&placeId={1}{2}+robloxLocale:en_us+gameLocale:en_us>", Ticket, PlaceID.Text, HasJobId ? "" : ("&gameId=" + JobID.Text), HasJobId ? "" : "Job", LaunchTime, r.Next(100000, 130000).ToString() + r.Next(100000, 900000).ToString()));
+                Clipboard.SetText(string.Format("<roblox-player://1/1+launchmode:play+gameinfo:{0}+launchtime:{4}+browsertrackerid:{5}+placelauncherurl:https://assetgame.roblox.com/game/PlaceLauncher.ashx?request=RequestGame{3}&placeId={1}{2}+robloxLocale:en_us+gameLocale:en_us>", Ticket, PlaceID.Text, HasJobId ? "" : ("&gameId=" + CurrentJobId), HasJobId ? "" : "Job", LaunchTime, r.Next(100000, 130000).ToString() + r.Next(100000, 900000).ToString()));
             }
         }
 
@@ -1879,7 +1889,7 @@ namespace RBX_Alt_Manager
 
             foreach (Account account in AccountsView.SelectedObjects)
             {
-                if (string.IsNullOrEmpty(PlaceID.Text) && string.IsNullOrEmpty(JobID.Text))
+                if (string.IsNullOrEmpty(PlaceID.Text) && string.IsNullOrEmpty(CurrentJobId))
                 {
                     account.RemoveField("SavedPlaceId");
                     account.RemoveField("SavedJobId");
@@ -1889,11 +1899,11 @@ namespace RBX_Alt_Manager
 
                 string PlaceId = CurrentPlaceId;
 
-                if (JobID.Text.Contains("privateServerLinkCode") && Regex.IsMatch(JobID.Text, @"\/games\/(\d+)\/"))
+                if (CurrentJobId.Contains("privateServerLinkCode") && Regex.IsMatch(CurrentJobId, @"\/games\/(\d+)\/"))
                     PlaceId = Regex.Match(CurrentJobId, @"\/games\/(\d+)\/").Groups[1].Value;
 
                 account.SetField("SavedPlaceId", PlaceId);
-                account.SetField("SavedJobId", JobID.Text);
+                account.SetField("SavedJobId", CurrentJobId);
             }
         }
 
@@ -2178,6 +2188,56 @@ namespace RBX_Alt_Manager
         private void PlaceID_Click( object sender, EventArgs e )
         {
             PlaceID.SelectAll(); // Allows quick replacing of the PlaceID with a click and ctrl-v.
+        }
+
+        private void PrivateServerSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (PrivateServerSelector.SelectedItem is ComboBoxItem item && !string.IsNullOrEmpty(item.Value))
+            {
+                JoinServer.Enabled = true;
+            }
+            else
+            {
+                JoinServer.Enabled = false;
+            }
+        }
+
+        private void ManageServersButton_Click(object sender, EventArgs e)
+        {
+            ManageServersDialog dialog = new ManageServersDialog();
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                RefreshPrivateServerSelector();
+            }
+        }
+
+        private void RefreshPrivateServerSelector()
+        {
+            PrivateServerSelector.Items.Clear();
+            PrivateServerManager manager = PrivateServerManager.GetInstance();
+            foreach (var server in manager.GetServers())
+            {
+                PrivateServerSelector.Items.Add(new ComboBoxItem(server.Name, server.JobId));
+            }
+            PrivateServerSelector.SelectedIndex = -1;
+            JoinServer.Enabled = false;
+        }
+
+        public class ComboBoxItem
+        {
+            public string Label { get; set; }
+            public string Value { get; set; }
+
+            public ComboBoxItem(string label, string value)
+            {
+                Label = label;
+                Value = value;
+            }
+
+            public override string ToString()
+            {
+                return Label;
+            }
         }
     }
 }
