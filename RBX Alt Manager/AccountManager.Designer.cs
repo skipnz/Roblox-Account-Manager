@@ -85,7 +85,8 @@ namespace RBX_Alt_Manager
             this.ShuffleIcon = new System.Windows.Forms.PictureBox();
             this.DefaultEncryptionButton = new System.Windows.Forms.Button();
             this.PasswordEncryptionButton = new System.Windows.Forms.Button();
-            this.JobID = new RBX_Alt_Manager.Classes.BorderedTextBox();
+            this.PrivateServerSelector = new System.Windows.Forms.ComboBox();
+            this.ManageServersButton = new System.Windows.Forms.Button();
             this.DonateButton = new System.Windows.Forms.Button();
             this.AccountsView = new BrightIdeasSoftware.ObjectListView();
             this.Username = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -620,17 +621,26 @@ namespace RBX_Alt_Manager
             this.PasswordEncryptionButton.UseVisualStyleBackColor = true;
             this.PasswordEncryptionButton.Click += new System.EventHandler(this.PasswordEncryptionButton_Click);
             // 
-            // JobID
-            // 
-            this.JobID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.JobID.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(122)))), ((int)(((byte)(122)))));
-            this.JobID.Location = new System.Drawing.Point(602, 43);
-            this.JobID.Name = "JobID";
-            this.JobID.Size = new System.Drawing.Size(143, 20);
-            this.JobID.TabIndex = 2;
-            this.SaveTooltip.SetToolTip(this.JobID, "Job ID is a unique ID assigned to every roblox server.\r\nYou may also put a Privat" +
-        "e Server link in this box to join it.");
-            this.JobID.Click += new System.EventHandler(this.JobID_Click);
+            // PrivateServerSelector
+            //
+            this.PrivateServerSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PrivateServerSelector.Location = new System.Drawing.Point(602, 43);
+            this.PrivateServerSelector.Name = "PrivateServerSelector";
+            this.PrivateServerSelector.Size = new System.Drawing.Size(58, 20);
+            this.PrivateServerSelector.TabIndex = 2;
+            this.PrivateServerSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.PrivateServerSelector.SelectedIndexChanged += new System.EventHandler(this.PrivateServerSelector_SelectedIndexChanged);
+            //
+            // ManageServersButton
+            //
+            this.ManageServersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ManageServersButton.Location = new System.Drawing.Point(665, 43);
+            this.ManageServersButton.Name = "ManageServersButton";
+            this.ManageServersButton.Size = new System.Drawing.Size(75, 20);
+            this.ManageServersButton.TabIndex = 3;
+            this.ManageServersButton.Text = "Manage";
+            this.ManageServersButton.UseVisualStyleBackColor = true;
+            this.ManageServersButton.Click += new System.EventHandler(this.ManageServersButton_Click);
             // 
             // DonateButton
             // 
@@ -1082,7 +1092,8 @@ namespace RBX_Alt_Manager
             this.Controls.Add(this.JoinServer);
             this.Controls.Add(this.LabelJobID);
             this.Controls.Add(this.LabelPlaceID);
-            this.Controls.Add(this.JobID);
+            this.Controls.Add(this.ManageServersButton);
+            this.Controls.Add(this.PrivateServerSelector);
             this.Controls.Add(this.PlaceID);
             this.Controls.Add(this.AccountsView);
             this.Controls.Add(this.PasswordPanel);
@@ -1116,7 +1127,8 @@ namespace RBX_Alt_Manager
 
         #endregion
         public Classes.BorderedTextBox PlaceID;
-        public Classes.BorderedTextBox JobID;
+        private System.Windows.Forms.ComboBox PrivateServerSelector;
+        private System.Windows.Forms.Button ManageServersButton;
         private System.Windows.Forms.Label LabelJobID;
         private MenuButton Add;
         private System.Windows.Forms.Button Remove;
