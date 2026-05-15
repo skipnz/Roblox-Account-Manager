@@ -280,7 +280,7 @@ namespace RBX_Alt_Manager
         private void ServerListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (ServerListView.SelectedObject is ServerData server)
-                AccountManager.Instance.JobID.Text = server.type == "VIP" ? "VIP:" + server.accessCode : server.id;
+                // JobID field removed - use PrivateServerSelector dropdown instead
         }
 
         private async void joinServerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -468,7 +468,7 @@ namespace RBX_Alt_Manager
             if (FavoritesListView.SelectedObject is FavoriteGame game)
             {
                 AccountManager.Instance.PlaceID.Text = game.Details.placeId.ToString();
-                AccountManager.Instance.JobID.Text = !string.IsNullOrEmpty(game.PrivateServer) ? game.PrivateServer.ToString() : "";
+                // JobID field removed - use PrivateServerSelector dropdown instead
             }
         }
 
@@ -506,7 +506,7 @@ namespace RBX_Alt_Manager
             RControl.Selected += (s, args) =>
             {
                 AccountManager.Instance.PlaceID.Text = $"{args.Game.Details.placeId}";
-                AccountManager.Instance.JobID.Text = AccountManager.Instance.JobID.Text = !string.IsNullOrEmpty(RControl.Favorite?.PrivateServer) ? RControl.Favorite?.PrivateServer : string.Empty;
+                // JobID field removed - use PrivateServerSelector dropdown instead
             };
 
             RControl.SetContext(FavoritesStrip);

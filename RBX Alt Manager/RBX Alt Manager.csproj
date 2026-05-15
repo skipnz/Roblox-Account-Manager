@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version='1.0' encoding='utf-8'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
   <Import Project="..\packages\CefSharp.Common.109.1.110\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.109.1.110\build\CefSharp.Common.props')" />
   <Import Project="..\packages\cef.redist.x86.109.1.11\build\cef.redist.x86.props" Condition="Exists('..\packages\cef.redist.x86.109.1.11\build\cef.redist.x86.props')" />
   <Import Project="..\packages\cef.redist.x64.109.1.11\build\cef.redist.x64.props" Condition="Exists('..\packages\cef.redist.x64.109.1.11\build\cef.redist.x64.props')" />
@@ -501,7 +501,7 @@
     <Compile Include="Forms\ServerList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ServerList.Designer.cs">
+    <Compile Include="Forms\ManageServersDialog.cs"><SubType>Form</SubType></Compile><Compile Include="Forms\ManageServersDialog.Designer.cs"><DependentUpon>ManageServersDialog.cs</DependentUpon></Compile><Compile Include="Forms\AddEditServerDialog.cs"><SubType>Form</SubType></Compile><Compile Include="Forms\AddEditServerDialog.Designer.cs"><DependentUpon>AddEditServerDialog.cs</DependentUpon></Compile><Compile Include="Forms\ServerList.Designer.cs">
       <DependentUpon>ServerList.cs</DependentUpon>
     </Compile>
     <Compile Include="Classes\WebServer.cs" />
