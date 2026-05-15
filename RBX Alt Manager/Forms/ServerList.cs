@@ -279,8 +279,7 @@ namespace RBX_Alt_Manager
 
         private void ServerListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (ServerListView.SelectedObject is ServerData server)
-                // JobID field removed - use PrivateServerSelector dropdown instead
+            // JobID field removed - use PrivateServerSelector dropdown instead
         }
 
         private async void joinServerToolStripMenuItem_Click(object sender, EventArgs e)
