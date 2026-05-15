@@ -504,7 +504,7 @@
     <Compile Include="Forms\ManageServersDialog.cs"><SubType>Form</SubType></Compile><Compile Include="Forms\ManageServersDialog.Designer.cs"><DependentUpon>ManageServersDialog.cs</DependentUpon></Compile><Compile Include="Forms\AddEditServerDialog.cs"><SubType>Form</SubType></Compile><Compile Include="Forms\AddEditServerDialog.Designer.cs"><DependentUpon>AddEditServerDialog.cs</DependentUpon></Compile><Compile Include="Forms\ServerList.Designer.cs">
       <DependentUpon>ServerList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\WebServer.cs" />
+    <Compile Include="Classes\PrivateServer.cs" /><Compile Include="Classes\PrivateServerManager.cs" /><Compile Include="Classes\WebServer.cs" />
     <EmbeddedResource Include="Classes\AvatarControl.resx">
       <DependentUpon>AvatarControl.cs</DependentUpon>
     </EmbeddedResource>
