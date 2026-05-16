@@ -2208,14 +2208,21 @@ namespace RBX_Alt_Manager
 
         private void RefreshPrivateServerSelector()
         {
+            if (PrivateServerSelector == null)
+                return;
+            
             PrivateServerSelector.Items.Clear();
             PrivateServerManager manager = PrivateServerManager.GetInstance();
+            if (manager == null)
+                return;
+            
             foreach (var server in manager.GetServers())
             {
                 PrivateServerSelector.Items.Add(new ComboBoxItem(server.Name, server.JobId));
             }
             PrivateServerSelector.SelectedIndex = -1;
-            JoinServer.Enabled = false;
+            if (JoinServer != null)
+                JoinServer.Enabled = false;
         }
 
         public class ComboBoxItem
