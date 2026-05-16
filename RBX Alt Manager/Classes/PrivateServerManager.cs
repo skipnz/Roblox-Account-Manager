@@ -59,8 +59,16 @@ namespace RBX_Alt_Manager.Classes
 
         public bool ValidateJobId(string jobId)
         {
-            // GUID format validation
-            return Guid.TryParse(jobId, out _);
+            // Accept both GUID format and numeric Roblox private server link codes
+            if (string.IsNullOrWhiteSpace(jobId))
+                return false;
+            
+            // Check if it's a valid GUID
+            if (Guid.TryParse(jobId, out _))
+                return true;
+            
+            // Check if it's a numeric private server link code (long numeric string)
+            return long.TryParse(jobId, out _);
         }
 
         private void LoadServers()

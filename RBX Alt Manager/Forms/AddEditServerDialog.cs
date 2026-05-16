@@ -43,7 +43,7 @@ namespace RBX_Alt_Manager.Forms
             PrivateServerManager manager = PrivateServerManager.GetInstance();
             if (!manager.ValidateJobId(JobIdTextBox.Text))
             {
-                MessageBox.Show("Invalid Job ID format. Please enter a valid GUID.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Invalid Job ID format. Please enter a valid GUID or Roblox private server link code.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
